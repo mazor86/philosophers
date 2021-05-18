@@ -1,0 +1,39 @@
+NAME = philo_one
+CC = gcc -O2
+FLAGS = -Wall -Wextra -Werror
+
+SRCS = main.c
+OBJ = $(SRCS:.c=.o)
+
+HEADER = philosopher
+
+%.o: %.c $(HEADER)
+	$(CC) $(FLAGS) -c -o $@ $<
+
+all: $(NAME)
+
+$(NAME): $(OBJ) $(LIBFT)
+	@echo "compile ..."
+	@$(CC) $(FLAGS) -o $(NAME) $(OBJ)
+
+$(LIBFT): NONE
+	@make -C ./libft
+
+bonus: all
+
+clean:
+	@echo "clean minishell object files..."
+	@rm -f $(OBJ)
+	@make -C libft clean
+
+fclean: clean
+	@echo "remove minishell"
+	@echo "remove libft.a"
+	@rm -f $(NAME) $(LIBFT)
+
+re: fclean all
+
+norminette:
+	@norminette $(SRCS) $(HEADER) libft/*.c
+
+.PHONY: all clean fclean bonus re norminette NONE
