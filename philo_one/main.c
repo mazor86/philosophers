@@ -52,16 +52,26 @@ static t_data 	*check_args(int ar, char **av)
 		free(temp);
 		return (NULL);
 	}
+	return (temp);
 }
 
 int	main(int ar, char **av)
 {
-	t_data	*args;
+	t_data	*prog_args;
+	int		exit_status;
 
-	args = check_args(ar, av);
-	if (args)
-		start_program(args);
+	prog_args = check_args(ar, av);
+	if (prog_args)
+	{
+		exit_status = start_program(prog_args);
+		if (exit_status)
+			printf("Run-time ERROR!\n");
+		free(prog_args);
+	}
 	else
+	{
 		printf("ERROR: Wrong arguments!\n");
-	return (0);
+		return (1);
+	}
+	return (exit_status);
 }
