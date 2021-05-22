@@ -28,9 +28,6 @@ int	validate_args(t_data *args, char **av)
 		return (0);
 	if (!args->times)
 		return (0);
-	args->time_to_die *= 1000;
-	args->time_to_eat *= 1000;
-	args->time_to_sleep *= 1000;
 	return (1);
 }
 
