@@ -1,36 +1,27 @@
 #include "philo_one.h"
 
-int 	is_all_digit(char *str)
-{
-	while (*str)
-	{
-		if (!ft_isdigit(*str))
-			return (0);
-		str++;
-	}
-	return (1);
-}
+
 
 int	validate_args(t_data *args, char **av)
 {
 	args->num = ft_atoi(av[1]);
-	args->time_to_die = ft_atoi(av[2]);
-	args->time_to_eat = ft_atoi(av[3]);
-	args->time_to_sleep = ft_atoi(av[4]);
+	args->to_die = ft_atoi(av[2]);
+	args->to_eat = ft_atoi(av[3]);
+	args->to_sleep = ft_atoi(av[4]);
 	if (av[5])
-		args->times = ft_atoi(av[5]);
+		args->count = ft_atoi(av[5]);
 	else
-		args->times = -1;
-	if (args->time_to_die < 60 || args->time_to_eat < 60
-		|| args->time_to_sleep < 60)
+		args->count = -1;
+	if (args->to_die < 60 || args->to_eat < 60
+		|| args->to_sleep < 60)
 		return (0);
 	if (args->num < 2 || args->num > 200)
 		return (0);
-	if (!args->times)
+	if (!args->count)
 		return (0);
-	args->time_to_die *= 1000;
-	args->time_to_eat *= 1000;
-	args->time_to_sleep *= 1000;
+	args->to_die *= 1000;
+	args->to_eat *= 1000;
+	args->to_sleep *= 1000;
 	return (1);
 }
 
@@ -68,12 +59,12 @@ int	main(int ar, char **av)
 	{
 		exit_status = start_program(prog_args);
 		if (exit_status)
-			printf("Run-time ERROR!\n");
+			printf("%sRun-time ERROR!%s\n", RED_BOLD, RESET);
 		free(prog_args);
 	}
 	else
 	{
-		printf("ERROR: Wrong arguments!\n");
+		printf("%sERROR: Wrong arguments!%s\n", RED_BOLD, RESET);
 		return (1);
 	}
 	return (exit_status);
