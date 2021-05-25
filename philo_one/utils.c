@@ -19,12 +19,13 @@ int 	is_all_digit(char *str)
 	return (1);
 }
 
-long	get_time(struct timeval cur)
+long	get_time(void)
 {
-	long	time;
+	long			time;
+	struct timeval	cur;
 
-	time = (long)((cur.tv_sec * 1000));
-	time += (long)(cur.tv_usec) / 1000;
+	gettimeofday(&cur, NULL);
+	time = (long)((cur.tv_sec * 1000000)) + cur.tv_usec;
 	return (time);
 }
 
@@ -52,12 +53,15 @@ int free_memory(t_phil *phils, t_data *args)
 	{
 		i = 0;
 		while (i < args->num)
+		{
+			pthread_mutex_unlock(&args->forks[i]);
 			pthread_mutex_destroy(&args->forks[i++]);
+		}
 		free(args->forks);
 		args->forks = NULL;
 	}
-	if (args->m_print)
-		pthread_mutex_destroy(args->m_print);
+	if (args->m_death)
+		pthread_mutex_destroy(args->m_death);
 	if (phils)
 	{
 		free(phils);

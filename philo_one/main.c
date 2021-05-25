@@ -49,6 +49,13 @@ static t_data 	*check_args(int ar, char **av)
 	return (temp);
 }
 
+static void	init_ptr(t_data *prog_args)
+{
+	prog_args->forks = NULL;
+	prog_args->m_print = NULL;
+	prog_args->m_death = NULL;
+}
+
 int	main(int ar, char **av)
 {
 	t_data	*prog_args;
@@ -57,9 +64,14 @@ int	main(int ar, char **av)
 	prog_args = check_args(ar, av);
 	if (prog_args)
 	{
+		init_ptr(prog_args);
 		exit_status = start_program(prog_args);
 		if (exit_status)
 			printf("%sRun-time ERROR!%s\n", RED_BOLD, RESET);
+//		pthread_mutex_unlock(prog_args->m_print);
+		pthread_mutex_destroy(prog_args->m_print);
+		free(prog_args->m_print);
+		free(prog_args->m_death);
 		free(prog_args);
 	}
 	else

@@ -44,8 +44,6 @@ static t_phil *init_args(t_data *prog_args)
 {
 	t_phil *phils;
 
-	prog_args->forks = NULL;
-	prog_args->m_print = NULL;
 	prog_args->forks = init_forks(prog_args->num);
 	if (!prog_args->forks)
 		return (NULL);
@@ -54,6 +52,12 @@ static t_phil *init_args(t_data *prog_args)
 		return (NULL);
 	if (pthread_mutex_init(prog_args->m_print, NULL))
 		return (NULL);
+	prog_args->m_death = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
+	if (!prog_args->m_death)
+		return (NULL);
+	if (pthread_mutex_init(prog_args->m_death, NULL))
+		return (NULL);
+	pthread_mutex_lock(prog_args->m_death);
 	phils = (t_phil *)malloc(sizeof(t_phil) * prog_args->num);
 	if (!phils)
 		return (NULL);
@@ -64,11 +68,9 @@ static t_phil *init_args(t_data *prog_args)
 void	set_start_time(t_phil *phil)
 {
 	int				i;
-	struct timeval	sim_start;
 
 	i = 0;
-	gettimeofday(&sim_start, NULL);
-	phil->prog_args->sim_start = get_time(sim_start);
+	phil->prog_args->sim_start = get_time();
 	while (i < phil->prog_args->num)
 	{
 		phil[i].last_eat = phil->prog_args->sim_start;
@@ -79,22 +81,25 @@ void	set_start_time(t_phil *phil)
 int	start_program(t_data *prog_args)
 {
 	t_phil		*philosophers;
-	pthread_t	*ph_treads;
-	pthread_t	*wait_tread;
+	pthread_t	*ph_threads;
+	pthread_t	thread;
 	int 		i;
 
 	philosophers = init_args(prog_args);
 	if (!philosophers)
 		return (free_memory(philosophers, prog_args));
-	ph_treads = (pthread_t *) malloc(sizeof(ph_treads) * prog_args->num);
-	if (!ph_treads)
+	ph_threads = (pthread_t *) malloc(sizeof(ph_threads) * prog_args->num);
+	if (!ph_threads)
 		return (free_memory(philosophers, prog_args));
 	i = 0;
 	set_start_time(philosophers);
+	pthread_create(&thread, NULL, check_stop, (void *)philosophers);
+	pthread_detach(thread);
 	while (i < prog_args->num)
 	{
-		pthread_create(&ph_treads[i], NULL, eating, (void *)&philosophers[i]);
-		pthread_detach(ph_treads[i++]);
+		pthread_create(&ph_threads[i], NULL, eating, (void *)&philosophers[i]);
+		pthread_detach(ph_threads[i++]);
 	}
+	pthread_mutex_lock(prog_args->m_death);
 	return (free_memory(philosophers, prog_args) - 1);
 }

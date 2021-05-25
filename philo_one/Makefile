@@ -2,13 +2,13 @@ NAME = philo_one
 CC = gcc -O2
 FLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c init.c eating.c ft_atoi.c ft_isdigit.c
+SRCS = main.c init.c eating.c utils.c waiter.c
 OBJ = $(SRCS:.c=.o)
 
 HEADER = philo_one.h
 
 %.o: %.c $(HEADER)
-	$(CC) $(FLAGS) -c -o $@ $<
+	$(CC) $(FLAGS) -c -o $@ $< -g
 
 all: $(NAME)
 

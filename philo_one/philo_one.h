@@ -22,7 +22,7 @@ typedef struct s_data
 	long 			sim_start;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*m_print;
-	pthread_mutex_t	*m_dead;
+	pthread_mutex_t	*m_death;
 }	t_data;
 
 typedef struct s_phil
@@ -38,8 +38,11 @@ typedef struct s_phil
 int		ft_atoi(const char *nptr);
 int 	is_all_digit(char *str);
 int		start_program(t_data *args);
+void	*check_stop(void *args);
 void	*eating(void *args);
 int 	free_memory(t_phil *phils, t_data *args);
-long	get_time(struct timeval cur);
+long	get_time(void);
+void	print_message(t_phil *phil, char *message, long cur);
+
 
 #endif
