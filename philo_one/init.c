@@ -80,7 +80,7 @@ int	start_program(t_data *prog_args)
 {
 	t_phil		*philosophers;
 	pthread_t	*ph_treads;
-	pthread_t	*w_tread;
+	pthread_t	*wait_tread;
 	int 		i;
 
 	philosophers = init_args(prog_args);
