@@ -92,3 +92,52 @@ void	set_start_time(t_phil *phil)
 		i++;
 	}
 }
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (*(s++))
+		len++;
+	return (len);
+}
+
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}
+
+void		ft_putnbr_fd(int n, int fd)
+{
+	int		index;
+	int		array[11];
+	long	number;
+
+	index = 0;
+	number = n;
+	if (n < 0)
+	{
+		number *= -1;
+		ft_putchar_fd('-', fd);
+	}
+	while (number != 0)
+	{
+		array[index] = number % 10;
+		number /= 10;
+		index++;
+	}
+	if (n == 0)
+		ft_putchar_fd('0', fd);
+	while (index != 0)
+	{
+		ft_putchar_fd(array[index - 1] + '0', fd);
+		index--;
+	}
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (s)
+		write(fd, s, ft_strlen(s));
+}
