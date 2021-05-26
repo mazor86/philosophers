@@ -79,3 +79,16 @@ int free_memory(t_phil *phils, t_data *args)
 	}
 	return (1);
 }
+
+void	set_start_time(t_phil *phil)
+{
+	int				i;
+
+	i = 0;
+	phil->prog_args->sim_start = get_time();
+	while (i < phil->prog_args->num)
+	{
+		phil[i].last_eat = phil->prog_args->sim_start;
+		i++;
+	}
+}

@@ -40,24 +40,35 @@ static pthread_mutex_t	*init_forks(int num_of_phil)
 	return (forks);
 }
 
-static t_phil *init_args(t_data *prog_args)
+static int	init_mutex(t_data *prog_args)
 {
-	t_phil *phils;
+	prog_args->m_print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (!prog_args->m_print)
+		return (0);
+	if (pthread_mutex_init(prog_args->m_print, NULL))
+		return (0);
+	prog_args->m_death = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (!prog_args->m_death)
+		return (0);
+	if (pthread_mutex_init(prog_args->m_death, NULL))
+		return (0);
+	pthread_mutex_lock(prog_args->m_death);
+	prog_args->m_eat = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (!prog_args->m_eat)
+		return (0);
+	if (pthread_mutex_init(prog_args->m_eat, NULL))
+		return (0);
+	return (1);
+}
+
+static t_phil	*init_args(t_data *prog_args)
+{
+	t_phil	*phils;
 
 	prog_args->forks = init_forks(prog_args->num);
 	if (!prog_args->forks)
 		return (NULL);
-	prog_args->m_print = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
-	if (!prog_args->m_print)
-		return (NULL);
-	if (pthread_mutex_init(prog_args->m_print, NULL))
-		return (NULL);
-	prog_args->m_death = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
-	if (!prog_args->m_death)
-		return (NULL);
-	if (pthread_mutex_init(prog_args->m_death, NULL))
-		return (NULL);
-	if (!prog_args->m_permission)
+	if (!init_mutex(prog_args))
 		return (NULL);
 	phils = (t_phil *)malloc(sizeof(t_phil) * prog_args->num);
 	if (!phils)
@@ -66,25 +77,12 @@ static t_phil *init_args(t_data *prog_args)
 	return (phils);
 }
 
-void	set_start_time(t_phil *phil)
-{
-	int				i;
-
-	i = 0;
-	phil->prog_args->sim_start = get_time();
-	while (i < phil->prog_args->num)
-	{
-		phil[i].last_eat = phil->prog_args->sim_start;
-		i++;
-	}
-}
-
 int	start_program(t_data *prog_args)
 {
 	t_phil		*philosophers;
 	pthread_t	*ph_threads;
 	pthread_t	thread;
-	int 		i;
+	int			i;
 
 	philosophers = init_args(prog_args);
 	if (!philosophers)

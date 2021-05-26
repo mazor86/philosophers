@@ -1,27 +1,25 @@
 NAME = philo_one
-CC = gcc -O2
+CC = gcc
 FLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c init.c eating.c utils.c waiter.c
+SRCS = main.c init.c eating.c utils.c monitor.c
 OBJ = $(SRCS:.c=.o)
 
 HEADER = philo_one.h
 
 %.o: %.c $(HEADER)
-	$(CC) $(FLAGS) -c -o $@ $< -g
+	$(CC) $(FLAGS) -c -o $@ $<
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "compile ..."
-	@$(CC) $(FLAGS) -o $(NAME) $(OBJ)
+	$(CC) $(FLAGS) -o $(NAME) $(OBJ)
 
 clean:
-	@echo "clean minishell object files..."
-	@rm -f $(OBJ)
+	rm -f $(OBJ)
 
 fclean: clean
-	@rm -f $(NAME)
+	rm -f $(NAME)
 
 re: fclean all
 
