@@ -45,6 +45,16 @@ int	ft_atoi(const char *nptr)
 	return (num);
 }
 
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
 int free_memory(t_phil *phils, t_data *args)
 {
 	int	i;

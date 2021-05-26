@@ -54,6 +54,7 @@ static void	init_ptr(t_data *prog_args)
 	prog_args->forks = NULL;
 	prog_args->m_print = NULL;
 	prog_args->m_death = NULL;
+	prog_args->m_permission = NULL;
 }
 
 int	main(int ar, char **av)

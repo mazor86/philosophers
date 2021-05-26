@@ -23,6 +23,7 @@ typedef struct s_data
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*m_print;
 	pthread_mutex_t	*m_death;
+	pthread_mutex_t	*m_permission;
 }	t_data;
 
 typedef struct s_phil
@@ -35,14 +36,15 @@ typedef struct s_phil
 	t_data			*prog_args;
 }	t_phil;
 
+int		ft_strcmp(const char *s1, const char *s2);
 int		ft_atoi(const char *nptr);
 int 	is_all_digit(char *str);
 int		start_program(t_data *args);
 void	*check_stop(void *args);
 void	*eating(void *args);
-int 	free_memory(t_phil *phils, t_data *args);
+int		free_memory(t_phil *phils, t_data *args);
 long	get_time(void);
-void	print_message(t_phil *phil, char *message, long cur);
+void	print_message(t_phil *phil, char *message);
 
 
 #endif
