@@ -6,6 +6,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <string.h>
 # define RESET "\x1B[0m"
 # define RED_BOLD "\x1B[1;31m"
 # define GREEN "\x1B[32m"
