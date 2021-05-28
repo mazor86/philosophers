@@ -60,7 +60,7 @@ void	*eating(void *phil_args)
 		take_fork(phil);
 		wait_mutex(args->m_eat);
 		start_eat(phil);
-		pthread_mutex_unlock(args->m_eat);
+		wait_mutex(args->m_eat);
 		pthread_mutex_lock(args->m_print);
 		print_message(phil, "is sleeping");
 		pthread_mutex_unlock(args->m_print);
