@@ -43,10 +43,7 @@ int	free_memory(t_phil *phils, t_data *args)
 	{
 		i = 0;
 		while (i < args->num)
-		{
-			pthread_mutex_unlock(&args->forks[i]);
 			pthread_mutex_destroy(&args->forks[i++]);
-		}
 		free(args->forks);
 		args->forks = NULL;
 	}
