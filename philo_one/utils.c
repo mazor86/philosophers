@@ -19,16 +19,6 @@ int 	is_all_digit(char *str)
 	return (1);
 }
 
-long	get_time(void)
-{
-	long			time;
-	struct timeval	cur;
-
-	gettimeofday(&cur, NULL);
-	time = (long)((cur.tv_sec * 1000000)) + cur.tv_usec;
-	return (time);
-}
-
 int	ft_atoi(const char *nptr)
 {
 	long	num;
@@ -45,17 +35,7 @@ int	ft_atoi(const char *nptr)
 	return (num);
 }
 
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	while (*s1 && *s2 && *s1 == *s2)
-	{
-		s1++;
-		s2++;
-	}
-	return ((unsigned char)*s1 - (unsigned char)*s2);
-}
-
-int free_memory(t_phil *phils, t_data *args)
+int	free_memory(t_phil *phils, t_data *args)
 {
 	int	i;
 
@@ -91,14 +71,4 @@ void	set_start_time(t_phil *phil)
 		phil[i].last_eat = phil->prog_args->sim_start;
 		i++;
 	}
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (*(s++))
-		len++;
-	return (len);
 }

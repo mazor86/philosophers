@@ -1,5 +1,25 @@
 #include "philo_one.h"
 
+static size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (*(s++))
+		len++;
+	return (len);
+}
+
+static int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
 static void	phil_itoa(long n, char *number)
 {
 	size_t	len;
@@ -68,7 +88,7 @@ void	print_message(t_phil *phil, char *message)
 	i += ft_strlcpy(output + i, CYAN, ft_strlen(CYAN) + 1);
 	phil_itoa(phil->index, number);
 	if (!ft_strcmp(message, "simulation stopped"))
-		
+		memset(number, 0, 16);
 	i += ft_strlcpy(output + i, number, ft_strlen(number) + 1);
 	i += ft_strlcpy(output + i, RESET, ft_strlen(RESET) + 1);
 	output[i++] = ' ';

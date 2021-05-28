@@ -10,7 +10,6 @@
 # define RESET "\x1B[0m"
 # define RED_BOLD "\x1B[1;31m"
 # define GREEN "\x1B[32m"
-# define MAGENTA "\x1B[35m"
 # define CYAN "\x1B[36m"
 
 typedef struct s_data
@@ -38,7 +37,6 @@ typedef struct s_phil
 	t_data			*prog_args;
 }	t_phil;
 
-int		ft_strcmp(const char *s1, const char *s2);
 int		ft_atoi(const char *nptr);
 int		is_all_digit(char *str);
 int		start_program(t_data *args);
@@ -48,6 +46,5 @@ int		free_memory(t_phil *phils, t_data *args);
 long	get_time(void);
 void	print_message(t_phil *phil, char *message);
 void	set_start_time(t_phil *phil);
-size_t	ft_strlen(const char *s);
 
 #endif

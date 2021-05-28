@@ -1,6 +1,6 @@
 #include "philo_one.h"
 
-void	sleep_function(int time)
+static void	sleep_function(int time)
 {
 	long	cur;
 	long	end;
@@ -13,6 +13,12 @@ void	sleep_function(int time)
 		usleep(10);
 		cur = get_time();
 	}
+}
+
+static void	wait_mutex(pthread_mutex_t *mutex)
+{
+	pthread_mutex_lock(mutex);
+	pthread_mutex_unlock(mutex);
 }
 
 static void	take_fork(t_phil *phil)
@@ -41,28 +47,27 @@ static void	start_eat(t_phil *phil)
 
 void	*eating(void *phil_args)
 {
-	t_phil			*phil;
+	t_phil	*phil;
+	t_data	*args;
 
 	phil = (t_phil *)phil_args;
+	args = phil->prog_args;
 	if (phil->index % 2)
 		sleep_function(50000);
 	while (1)
 	{
-		pthread_mutex_lock(phil->prog_args->m_eat);
-		pthread_mutex_unlock(phil->prog_args->m_eat);
+		wait_mutex(args->m_eat);
 		take_fork(phil);
-		pthread_mutex_lock(phil->prog_args->m_eat);
-		pthread_mutex_unlock(phil->prog_args->m_eat);
+		wait_mutex(args->m_eat);
 		start_eat(phil);
-		pthread_mutex_unlock(phil->prog_args->m_eat);
-		pthread_mutex_lock(phil->prog_args->m_print);
+		pthread_mutex_unlock(args->m_eat);
+		pthread_mutex_lock(args->m_print);
 		print_message(phil, "is sleeping");
-		pthread_mutex_unlock(phil->prog_args->m_print);
-		sleep_function(phil->prog_args->to_sleep);
-		pthread_mutex_lock(phil->prog_args->m_eat);
-		pthread_mutex_unlock(phil->prog_args->m_eat);
-		pthread_mutex_lock(phil->prog_args->m_print);
+		pthread_mutex_unlock(args->m_print);
+		sleep_function(args->to_sleep);
+		wait_mutex(args->m_eat);
+		pthread_mutex_lock(args->m_print);
 		print_message(phil, "is thinking");
-		pthread_mutex_unlock(phil->prog_args->m_print);
+		pthread_mutex_unlock(args->m_print);
 	}
 }
