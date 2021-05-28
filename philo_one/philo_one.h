@@ -48,8 +48,6 @@ int		free_memory(t_phil *phils, t_data *args);
 long	get_time(void);
 void	print_message(t_phil *phil, char *message);
 void	set_start_time(t_phil *phil);
-void		ft_putnbr_fd(int n, int fd);
 size_t	ft_strlen(const char *s);
-void	ft_putstr_fd(char *s, int fd);
 
 #endif

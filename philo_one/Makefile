@@ -2,7 +2,7 @@ NAME = philo_one
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c init.c eating.c utils.c monitor.c
+SRCS = main.c init.c eating.c utils.c monitor.c print_message.c
 OBJ = $(SRCS:.c=.o)
 
 HEADER = philo_one.h
