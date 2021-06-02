@@ -56,7 +56,7 @@ int	free_memory(t_phil *phils, t_data *args)
 
 void	set_start_time(t_phil *phil)
 {
-	int				i;
+	int	i;
 
 	i = 0;
 	phil->prog_args->sim_start = get_time();
@@ -66,3 +66,4 @@ void	set_start_time(t_phil *phil)
 		i++;
 	}
 }
+

@@ -35,10 +35,6 @@ static int	init_semaphors(t_data *prog_args)
 	if (prog_args->sem_death == SEM_FAILED)
 		return (0);
 	sem_unlink("sem_death");
-	prog_args->sem_eat = sem_open("sem_eat", O_CREAT, 0644, 1);
-	if (prog_args->sem_eat == SEM_FAILED)
-		return (0);
-	sem_unlink("sem_eat");
 	return (1);
 }
 
@@ -78,10 +74,14 @@ int	start_program(t_data *prog_args)
 	while (i < prog_args->num)
 	{
 		pthread_create(&ph_threads[i], NULL, eating, (void *)&philosophers[i]);
-		pthread_detach(ph_threads[i]);
+		usleep(100);
 		i++;
 	}
+	i = 0;
+	while (i < prog_args->num)
+		pthread_join(ph_threads[i++], NULL);
 	sem_wait(prog_args->sem_death);
+	usleep(100000);
 	free(ph_threads);
 	return (free_memory(philosophers, prog_args) - 1);
 }

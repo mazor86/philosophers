@@ -15,6 +15,7 @@
 
 typedef struct s_data
 {
+	int				exit;
 	int				num;
 	int				to_die;
 	int				to_eat;
@@ -25,7 +26,6 @@ typedef struct s_data
 	sem_t			*forks;
 	sem_t			*sem_print;
 	sem_t			*sem_death;
-	sem_t			*sem_eat;
 }	t_data;
 
 typedef struct s_phil
@@ -44,6 +44,8 @@ void	*eating(void *args);
 int		free_memory(t_phil *phils, t_data *args);
 long	get_time(void);
 void	print_message(t_phil *phil, char *message);
+void	sleep_function(int time);
 void	set_start_time(t_phil *phil);
+void	init_action(void (*action[4])(t_phil *));
 
 #endif

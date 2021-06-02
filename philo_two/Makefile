@@ -2,7 +2,7 @@ NAME = philo_two
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c init.c eating.c utils.c monitor.c print_message.c
+SRCS = main.c init.c action.c utils.c routines.c print_message.c utils2.c
 OBJ = $(SRCS:.c=.o)
 
 HEADER = philo_two.h

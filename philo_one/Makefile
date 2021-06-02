@@ -8,7 +8,7 @@ OBJ = $(SRCS:.c=.o)
 HEADER = philo_one.h
 
 %.o: %.c $(HEADER)
-	$(CC) $(FLAGS) -c -o $@ $< -g
+	$(CC) $(FLAGS) -c -o $@ $<
 
 all: $(NAME)
 

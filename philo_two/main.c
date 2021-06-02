@@ -52,8 +52,8 @@ static void	init_ptr(t_data *prog_args)
 	prog_args->forks = NULL;
 	prog_args->sem_print = NULL;
 	prog_args->sem_death = NULL;
-	prog_args->sem_eat = NULL;
 	prog_args->phil_left = prog_args->num;
+	prog_args->exit = 0;
 }
 
 int	main(int ar, char **av)
@@ -68,10 +68,9 @@ int	main(int ar, char **av)
 		exit_status = start_program(prog_args);
 		if (exit_status)
 			printf("%sRun-time ERROR!%s\n", RED_BOLD, RESET);
-//		usleep(10);
+		usleep(10000);
 		sem_close(prog_args->sem_print);
 		sem_close(prog_args->sem_death);
-		sem_close(prog_args->sem_eat);
 		free(prog_args);
 	}
 	else
