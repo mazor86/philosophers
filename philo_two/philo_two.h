@@ -7,6 +7,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
+# include <semaphore.h>
 # define RESET "\x1B[0m"
 # define RED_BOLD "\x1B[1;31m"
 # define GREEN "\x1B[32m"
@@ -21,17 +22,15 @@ typedef struct s_data
 	int				count;
 	int				phil_left;
 	long			sim_start;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*m_print;
-	pthread_mutex_t	*m_death;
-	pthread_mutex_t	*m_eat;
+	sem_t			*forks;
+	sem_t			*sem_print;
+	sem_t			*sem_death;
+	sem_t			*sem_eat;
 }	t_data;
 
 typedef struct s_phil
 {
 	int				index;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*r_fork;
 	long			last_eat;
 	int				count_eat;
 	t_data			*prog_args;

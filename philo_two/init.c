@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 static void	init_philosophers(t_phil *philosophers, t_data *prog_args)
 {
@@ -8,56 +8,37 @@ static void	init_philosophers(t_phil *philosophers, t_data *prog_args)
 	while (i < prog_args->num)
 	{
 		philosophers[i].index = i + 1;
-		philosophers[i].l_fork = &prog_args->forks[i % prog_args->num];
-		philosophers[i].r_fork = &prog_args->forks[(i + 1) % prog_args->num];
 		philosophers[i].count_eat = 0;
 		philosophers[i].prog_args = prog_args;
 		i++;
 	}
 }
 
-static pthread_mutex_t	*init_forks(int num_of_phil)
+static sem_t	*init_forks(int num_of_phil)
 {
-	pthread_mutex_t	*forks;
-	int				i;
-	int				fail;
+	sem_t	*forks;
 
-	forks = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * num_of_phil);
-	if (!forks)
+	forks = sem_open("sem_forks", O_CREAT, 0644, num_of_phil);
+	if (forks == SEM_FAILED)
 		return (NULL);
-	i = 0;
-	while (i < num_of_phil)
-	{
-		if (pthread_mutex_init(&forks[i], NULL))
-		{
-			fail = 0;
-			while (fail < i)
-				pthread_mutex_destroy(&forks[fail++]);
-			return (NULL);
-		}
-		i++;
-	}
+	sem_unlink("sem_forks");
 	return (forks);
 }
 
-static int	init_mutex(t_data *prog_args)
+static int	init_semaphors(t_data *prog_args)
 {
-	prog_args->m_print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (!prog_args->m_print)
+	prog_args->sem_print = sem_open("sem_print", O_CREAT, 0644, 1);
+	if (prog_args->sem_print == SEM_FAILED)
 		return (0);
-	if (pthread_mutex_init(prog_args->m_print, NULL))
+	sem_unlink("sem_print");
+	prog_args->sem_death = sem_open("sem_death", O_CREAT, 0644, 0);
+	if (prog_args->sem_death == SEM_FAILED)
 		return (0);
-	prog_args->m_death = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (!prog_args->m_death)
+	sem_unlink("sem_death");
+	prog_args->sem_eat = sem_open("sem_eat", O_CREAT, 0644, 1);
+	if (prog_args->sem_eat == SEM_FAILED)
 		return (0);
-	if (pthread_mutex_init(prog_args->m_death, NULL))
-		return (0);
-	pthread_mutex_lock(prog_args->m_death);
-	prog_args->m_eat = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (!prog_args->m_eat)
-		return (0);
-	if (pthread_mutex_init(prog_args->m_eat, NULL))
-		return (0);
+	sem_unlink("sem_eat");
 	return (1);
 }
 
@@ -68,7 +49,7 @@ static t_phil	*init_args(t_data *prog_args)
 	prog_args->forks = init_forks(prog_args->num);
 	if (!prog_args->forks)
 		return (NULL);
-	if (!init_mutex(prog_args))
+	if (!init_semaphors(prog_args))
 		return (NULL);
 	phils = (t_phil *)malloc(sizeof(t_phil) * prog_args->num);
 	if (!phils)
@@ -100,7 +81,7 @@ int	start_program(t_data *prog_args)
 		pthread_detach(ph_threads[i]);
 		i++;
 	}
-	pthread_mutex_lock(prog_args->m_death);
+	sem_wait(prog_args->sem_death);
 	free(ph_threads);
 	return (free_memory(philosophers, prog_args) - 1);
 }

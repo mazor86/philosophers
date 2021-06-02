@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 long	get_time(void)
 {
@@ -21,19 +21,19 @@ void	*check_stop(void *args)
 		i = -1;
 		while (++i < phils->prog_args->num)
 		{
-			pthread_mutex_lock(phils->prog_args->m_eat);
+			sem_wait(phils->prog_args->sem_eat);
 			if (phils[i].last_eat + phils->prog_args->to_die < get_time()
 				|| phils->prog_args->phil_left == 0)
 			{
-				pthread_mutex_lock(phils->prog_args->m_print);
+				sem_wait(phils->prog_args->sem_print);
 				if (phils[i].last_eat + phils->prog_args->to_die < get_time())
 					print_message(&phils[i], "died");
 				else
 					print_message(phils, "simulation stopped");
-				pthread_mutex_unlock(phils->prog_args->m_death);
+				sem_post(phils->prog_args->sem_death);
 				return (NULL);
 			}
-			pthread_mutex_unlock(phils->prog_args->m_eat);
+			sem_post(phils->prog_args->sem_eat);
 		}
 	}
 }

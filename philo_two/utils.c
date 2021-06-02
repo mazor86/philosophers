@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 static int	ft_isdigit(int c)
 {
@@ -37,21 +37,15 @@ int	ft_atoi(const char *nptr)
 
 int	free_memory(t_phil *phils, t_data *args)
 {
-	int	i;
-
-	if (args->forks)
+	if (args->forks && args->forks != SEM_FAILED)
 	{
-		i = 0;
-		while (i < args->num)
-		{
-			pthread_mutex_unlock(&args->forks[i]);
-			pthread_mutex_destroy(&args->forks[i++]);
-		}
-		free(args->forks);
+		sem_close(args->forks);
 		args->forks = NULL;
 	}
-	if (args->m_death)
-		pthread_mutex_destroy(args->m_death);
+	if (args->sem_death && args->sem_death != SEM_FAILED)
+	{
+		sem_close(args->sem_death);
+	}
 	if (phils)
 	{
 		free(phils);

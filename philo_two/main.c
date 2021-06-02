@@ -1,4 +1,4 @@
-#include "philo_one.h"
+#include "philo_two.h"
 
 int	validate_args(t_data *args, char **av)
 {
@@ -50,9 +50,9 @@ static t_data 	*check_args(int ar, char **av)
 static void	init_ptr(t_data *prog_args)
 {
 	prog_args->forks = NULL;
-	prog_args->m_print = NULL;
-	prog_args->m_death = NULL;
-	prog_args->m_eat = NULL;
+	prog_args->sem_print = NULL;
+	prog_args->sem_death = NULL;
+	prog_args->sem_eat = NULL;
 	prog_args->phil_left = prog_args->num;
 }
 
@@ -68,12 +68,10 @@ int	main(int ar, char **av)
 		exit_status = start_program(prog_args);
 		if (exit_status)
 			printf("%sRun-time ERROR!%s\n", RED_BOLD, RESET);
-		pthread_mutex_destroy(prog_args->m_eat);
-		usleep(100000);
-		pthread_mutex_destroy(prog_args->m_print);
-		free(prog_args->m_print);
-		free(prog_args->m_death);
-		free(prog_args->m_eat);
+//		usleep(10);
+		sem_close(prog_args->sem_print);
+		sem_close(prog_args->sem_death);
+		sem_close(prog_args->sem_eat);
 		free(prog_args);
 	}
 	else
