@@ -1,5 +1,11 @@
 #include "philo_two.h"
 
+static void	post_semaphors(t_data *args)
+{
+	sem_post(args->sem_death);
+	sem_post(args->sem_print);
+}
+
 void	*check_stop(void *args)
 {
 	t_phil	*phils;
@@ -15,13 +21,13 @@ void	*check_stop(void *args)
 			if (phils[i].last_eat + phils->prog_args->to_die < get_time()
 				|| phils->prog_args->phil_left == 0)
 			{
+				sem_wait(phils->prog_args->sem_death);
 				phils->prog_args->exit = 1;
 				if (phils[i].last_eat + phils->prog_args->to_die < get_time())
 					print_message(&phils[i], "died");
 				else
 					print_message(phils, "simulation stopped");
-				sem_post(phils->prog_args->sem_print);
-				sem_post(phils->prog_args->sem_death);
+				post_semaphors(phils->prog_args);
 				return (NULL);
 			}
 			sem_post(phils->prog_args->sem_print);
@@ -36,6 +42,8 @@ void	*eating(void *phil_args)
 	void	(*action[4])(t_phil *);
 
 	phil = (t_phil *)phil_args;
+	if (phil->index % 2)
+		sleep_function(50000);
 	init_action(action);
 	while (1)
 	{
@@ -44,7 +52,8 @@ void	*eating(void *phil_args)
 		{
 			if (phil->prog_args->exit)
 				return (NULL);
-			action[i++](phil);
+			action[i](phil);
+			i++;
 		}
 	}
 }

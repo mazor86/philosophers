@@ -31,7 +31,7 @@ static int	init_semaphors(t_data *prog_args)
 	if (prog_args->sem_print == SEM_FAILED)
 		return (0);
 	sem_unlink("sem_print");
-	prog_args->sem_death = sem_open("sem_death", O_CREAT, 0644, 0);
+	prog_args->sem_death = sem_open("sem_death", O_CREAT, 0644, 1);
 	if (prog_args->sem_death == SEM_FAILED)
 		return (0);
 	sem_unlink("sem_death");
@@ -59,7 +59,6 @@ int	start_program(t_data *prog_args)
 	t_phil		*philosophers;
 	pthread_t	*ph_threads;
 	pthread_t	thread;
-	int			i;
 
 	philosophers = init_args(prog_args);
 	if (!philosophers)
@@ -67,21 +66,8 @@ int	start_program(t_data *prog_args)
 	ph_threads = (pthread_t *) malloc(sizeof(ph_threads) * prog_args->num);
 	if (!ph_threads)
 		return (free_memory(philosophers, prog_args));
-	i = 0;
-	set_start_time(philosophers);
-	pthread_create(&thread, NULL, check_stop, (void *)philosophers);
-	pthread_detach(thread);
-	while (i < prog_args->num)
-	{
-		pthread_create(&ph_threads[i], NULL, eating, (void *)&philosophers[i]);
-		usleep(100);
-		i++;
-	}
-	i = 0;
-	while (i < prog_args->num)
-		pthread_join(ph_threads[i++], NULL);
-	sem_wait(prog_args->sem_death);
-	usleep(100000);
+	if (create_and_join(philosophers, &thread, ph_threads))
+		return (free_memory(philosophers, prog_args));
 	free(ph_threads);
 	return (free_memory(philosophers, prog_args) - 1);
 }

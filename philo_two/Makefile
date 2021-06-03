@@ -8,7 +8,7 @@ OBJ = $(SRCS:.c=.o)
 HEADER = philo_two.h
 
 %.o: %.c $(HEADER)
-	$(CC) $(FLAGS) -c -o $@ $< -g
+	$(CC) $(FLAGS) -c -o $@ $<
 
 all: $(NAME)
 
@@ -26,4 +26,4 @@ re: fclean all
 norminette:
 	@norminette $(SRCS) $(HEADER)
 
-.PHONY: all clean fclean re norminette NONE
+.PHONY: all clean fclean re norminette

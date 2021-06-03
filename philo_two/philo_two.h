@@ -1,5 +1,5 @@
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 
 # include <sys/time.h>
 # include <pthread.h>
@@ -47,5 +47,6 @@ void	print_message(t_phil *phil, char *message);
 void	sleep_function(int time);
 void	set_start_time(t_phil *phil);
 void	init_action(void (*action[4])(t_phil *));
+int		create_and_join(t_phil *phils, pthread_t *thread, pthread_t *ph_tr);
 
 #endif

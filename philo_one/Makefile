@@ -26,4 +26,4 @@ re: fclean all
 norminette:
 	@norminette $(SRCS) $(HEADER)
 
-.PHONY: all clean fclean re norminette NONE
+.PHONY: all clean fclean re norminette

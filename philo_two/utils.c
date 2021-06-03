@@ -66,4 +66,3 @@ void	set_start_time(t_phil *phil)
 		i++;
 	}
 }
-
