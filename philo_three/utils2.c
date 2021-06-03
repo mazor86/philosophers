@@ -16,7 +16,7 @@ void	sleep_function(int time)
 	long	end;
 
 	end = get_time() + time;
-	usleep(time * 0.9);
+	usleep(time * 0.5);
 	cur = get_time();
 	while (cur < end)
 	{
@@ -25,27 +25,16 @@ void	sleep_function(int time)
 	}
 }
 
-int	create_and_join(t_phil *phils, pthread_t *thread, pthread_t *ph_threads)
+void	kill_all(pid_t *pid, int num, pid_t *eat_pid)
 {
 	int	i;
 
 	i = 0;
-	set_start_time(phils);
-	if (pthread_create(thread, NULL, check_stop, (void *)phils))
-		return (1);
-	if (pthread_detach(*thread))
-		return (1);
-	while (i < phils->prog_args->num)
+	while (i < num)
 	{
-		if (pthread_create(&ph_threads[i], NULL, eating, (void *)&phils[i]))
-			return (1);
+		kill(pid[i], SIGKILL);
 		i++;
 	}
-	i = 0;
-	while (i < phils->prog_args->num)
-	{
-		if (pthread_join(ph_threads[i++], NULL))
-			return (1);
-	}
-	return (0);
+	if (eat_pid)
+		kill(*eat_pid, SIGKILL);
 }

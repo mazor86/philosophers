@@ -38,31 +38,17 @@ int	ft_atoi(const char *nptr)
 int	free_memory(t_phil *phils, t_data *args)
 {
 	if (args->forks && args->forks != SEM_FAILED)
-	{
 		sem_close(args->forks);
-		args->forks = NULL;
-	}
 	if (args->sem_death && args->sem_death != SEM_FAILED)
-	{
 		sem_close(args->sem_death);
-	}
+	if (args->sem_left && args->sem_left != SEM_FAILED)
+		sem_close(args->sem_left);
+	if (args->pid)
+		free(args->pid);
 	if (phils)
 	{
 		free(phils);
 		phils = NULL;
 	}
 	return (1);
-}
-
-void	set_start_time(t_phil *phil)
-{
-	int	i;
-
-	i = 0;
-	phil->prog_args->sim_start = get_time();
-	while (i < phil->prog_args->num)
-	{
-		phil[i].last_eat = phil->prog_args->sim_start;
-		i++;
-	}
 }

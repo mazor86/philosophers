@@ -17,9 +17,6 @@ int	validate_args(t_data *args, char **av)
 		return (0);
 	if (!args->count)
 		return (0);
-	args->to_die *= 1000;
-	args->to_eat *= 1000;
-	args->to_sleep *= 1000;
 	return (1);
 }
 
@@ -54,6 +51,7 @@ static void	init_ptr(t_data *prog_args)
 	prog_args->sem_death = NULL;
 	prog_args->sem_left = NULL;
 	prog_args->exit = 0;
+	prog_args->pid = NULL;
 }
 
 int	main(int ar, char **av)
@@ -69,7 +67,6 @@ int	main(int ar, char **av)
 		if (exit_status)
 			printf("%sRun-time ERROR!%s\n", RED_BOLD, RESET);
 		usleep(10000);
-		sem_close(prog_args->sem_print);
 		sem_close(prog_args->sem_death);
 		free(prog_args);
 	}

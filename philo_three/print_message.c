@@ -82,7 +82,7 @@ void	print_message(t_phil *phil, char *message)
 	cur = get_time();
 	if (!ft_strcmp(message, "is eating"))
 		phil->last_eat = cur;
-	phil_itoa((cur - phil->prog_args->sim_start) / 1000, number);
+	phil_itoa((cur - phil->prog_args->sim_start), number);
 	i += ft_strlcpy(output + i, number, ft_strlen(number) + 1);
 	output[i++] = ' ';
 	i += ft_strlcpy(output + i, CYAN, ft_strlen(CYAN) + 1);
